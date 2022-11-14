@@ -24,29 +24,56 @@ class MuralsApiController
 
 
     public function gets()
-    { 
-        if(isset($_GET['sort']) && isset($_GET['order'])) {
-            $murals = $this->model->getAllmurals($_GET['sort'], $_GET['order']);
-        } 
+    {
 
-        else if (isset($_GET['sort'])) {
-            $murals = $this->model->getAllmurals($_GET['sort'], null);
-        }
-        
-        else if (isset($_GET['order'])) {
-            $murals = $this->model->getAllmurals(null, $_GET['order']);
-        }
-        
-        else {
-            $murals = $this->model->getAllmurals(null, null);
-        }
-
-        if ($murals != null) {
+        //order y sort  con sus distintas opciones
+        if (isset($_GET['sort']) && isset($_GET['order']) && !isset($_GET['linkTo']) && !isset($_GET['equalTo'])) {
+            if (strtoupper($_GET['order']) == "ASC" || strtoupper($_GET['order']) == "DESC") {
+                $murals = $this->model->getAllmurals($_GET['sort'], $_GET['order'], null, null);
+                $this->view->response($murals, 200);
+            } else {
+                $this->view->response("Error, order acepta asc o desc", 400);;
+            }
+            
+        } else if (isset($_GET['sort']) && !isset($_GET['order']) && !isset($_GET['linkTo']) && !isset($_GET['equalTo'])) {
+            $murals = $this->model->getAllmurals($_GET['sort'], null, null, null);
             $this->view->response($murals, 200);
+
+        } else if (isset($_GET['order']) && !isset($_GET['sort']) && !isset($_GET['linkTo']) && !isset($_GET['equalTo'])) {
+
+            if (strtoupper($_GET['order']) == "ASC" || strtoupper($_GET['order']) == "DESC") {
+                $murals = $this->model->getAllmurals(null, $_GET['order'], null, null);
+                $this->view->response($murals, 200);
+            } else {
+                $this->view->response("Error, order acepta asc o desc", 400);;
+            }
+
+        } else if (isset($_GET['sort']) && isset($_GET['order']) && isset($_GET['linkTo']) && isset($_GET['equalTo'])) {
+
+            if (strtoupper($_GET['order']) == "ASC" || strtoupper($_GET['order']) == "DESC") {
+                $murals = $this->model->filterMurales($_GET['sort'], $_GET['order'], $_GET['linkTo'], $_GET['equalTo']);
+                $this->view->response($murals, 200);
+            } else {
+                $this->view->response("Error, order acepta asc o desc", 400);;
+            }
+
+        } else if (!isset($_GET['sort']) && !isset($_GET['order']) && isset($_GET['linkTo']) && isset($_GET['equalTo'])) {
+
+            $murals = $this->model->filterMurales(null, null, $_GET['linkTo'], $_GET['equalTo']);
+            $this->view->response($murals, 200);
+
+        } else if (isset($_GET['sort']) && !isset($_GET['order']) && isset($_GET['linkTo']) && isset($_GET['equalTo'])) {
+
+            $murals = $this->model->filterMurales($_GET['sort'], null, $_GET['linkTo'], $_GET['equalTo']);
+            $this->view->response($murals, 200);
+
         } else {
-            $this->view->response('error', 404);
+            $murals = $this->model->getAllmurals(null, null, null, null);
+            $this->view->response($murals, 200);
         }
     }
+
+
 
 
     public function get($params = null)
