@@ -10,6 +10,7 @@ class MuralsModel
 
   function getAllMurals($sort = "id_mural", $order = "ASC", $linkTo = null, $equalTo = null)
   {
+   
     if ($sort == null) {
       $sort = "id_mural";
     }
@@ -17,6 +18,7 @@ class MuralsModel
       $order = "ASC";
     }
     $queryGeneral = "SELECT * FROM murales ORDER BY ";
+    
     // arreglo con los items de la tabla
     $columns = array(
       'id_tipo' => 'id_tipo',
@@ -35,6 +37,12 @@ class MuralsModel
       return null;
     }
 
+    if (isset($order)) {
+      $queryGeneral .= $order . " ";
+    } else {
+      return null;
+    }
+    
     $query = $this->db->prepare($queryGeneral);
     $query->execute();
     $murals = $query->fetchAll(PDO::FETCH_OBJ);
@@ -50,6 +58,7 @@ class MuralsModel
     $query->execute();
     }
    else if ($sort != null && $order != null && $linkTo != null && $equalTo != null) {
+    
       $query = $this->db->prepare("SELECT id_tipo, id_mural, anuario, nombre FROM murales WHERE  $linkTo = :$linkTo ORDER BY $sort $order");
       $query->bindParam(":" . $linkTo, $equalTo, PDO::PARAM_STR); // une parametros
       $query->execute();
