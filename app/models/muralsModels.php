@@ -58,7 +58,6 @@ class MuralsModel
     $query->execute();
     }
    else if ($sort != null && $order != null && $linkTo != null && $equalTo != null) {
-    
       $query = $this->db->prepare("SELECT id_tipo, id_mural, anuario, nombre FROM murales WHERE  $linkTo = :$linkTo ORDER BY $sort $order");
       $query->bindParam(":" . $linkTo, $equalTo, PDO::PARAM_STR); // une parametros
       $query->execute();
@@ -68,7 +67,8 @@ class MuralsModel
       $query->bindParam(":" . $linkTo, $equalTo, PDO::PARAM_STR); // une parametros
       $query->execute();
     }
-    $murals =  $query->fetchAll(PDO::FETCH_OBJ);
+
+    $murals = $query->fetchAll(PDO::FETCH_OBJ);
     return $murals;
   }
 

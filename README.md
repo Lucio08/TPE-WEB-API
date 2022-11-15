@@ -31,6 +31,6 @@ Este caso es especial ya que para insertar un mural necesitamos el body en forma
 "descripcion":"ejemplo",
 "ubicacion": "ejemplo",s
 "lugar": "ejemplo",
-"anuario": ejemplo,
+"anuario": "ejemplo",
 "imagen": "url"
 }
